@@ -25,7 +25,7 @@ Vagrant::Config.run do |config|
   #
   config.vm.provisioner = :chef_solo
   project_root = File.dirname( __FILE__ )
-  config.chef.cookbooks_path = File.join( project_root, '..', 'cookbooks' )
+  config.chef.cookbooks_path = File.join( project_root, 'cookbooks' )
 
   # chef recipies to use
   config.chef.add_recipe 'apache2'
