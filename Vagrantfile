@@ -18,7 +18,9 @@ Vagrant::Config.run do |config|
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
-  # config.vm.share_folder("v-data", "/vagrant_data", "../data")
+  config.vm.share_folder("repositories", "/var/codefoundry", "repositories")
+  config.vm.share_folder("db", "/var/db", "db")
+  config.vm.share_folder("app", "/var/www/vhosts/codefoundry", "app")
 
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
@@ -28,10 +30,12 @@ Vagrant::Config.run do |config|
   config.chef.cookbooks_path = File.join( project_root, 'cookbooks' )
 
   # chef recipies to use
-  config.chef.add_recipe 'apache2'
-  config.chef.add_recipe 'apache2::mod_dav_svn'
+  #config.chef.add_recipe 'apache2'
+  #config.chef.add_recipe 'apache2::mod_dav_svn'
+  config.chef.add_recipe 'codefoundry'
 
   # You may also specify custom JSON attributes:
-  # config.chef.json = { :mysql_password => "foo" }
+  #config.chef.json = {
+  #  }
 
 end
