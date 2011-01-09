@@ -1,0 +1,16 @@
+<VirtualHost *:80>
+  ServerName <%= @params[:server_name] %>
+
+  <Location />
+    DAV svn
+
+    SVNParentPath <%= node[:codefoundry][:repo_dir]/svn %>
+    # enable repository listing; this vhost is only accessed locally
+    SVNListParentPath on
+
+    # restrict this vhost to access from localhost only
+    # this will need to be changed if SVN and CF and hosted separately
+    Deny from all
+    Allow from 127
+  </Location>
+</VirtualHost>
