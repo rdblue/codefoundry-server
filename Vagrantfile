@@ -18,6 +18,8 @@ Vagrant::Config.run do |config|
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
+  #
+  # If you change these, update the entries in the JSON sent to Chef.
   config.vm.share_folder("repositories", "/var/codefoundry", "repositories")
   config.vm.share_folder("db", "/var/db", "db")
   config.vm.share_folder("app", "/var/www/vhosts/codefoundry", "app")
@@ -35,7 +37,15 @@ Vagrant::Config.run do |config|
   config.chef.add_recipe 'codefoundry'
 
   # You may also specify custom JSON attributes:
-  #config.chef.json = {
-  #  }
+  config.chef.json.merge! ( {
+      :codefoundry => {
+          :app_dir => "/var/www/vhosts/codefoundry",
+          :app_git_url => "git://github.com/rdblue/codefoundry.git",
+          :app_git_tag => "master",
+          :db_dir => "/var/db",
+          :db_type => "sqlite",
+          :repo_dir => "/var/codefoundry"
+        }
+    } )
 
 end
