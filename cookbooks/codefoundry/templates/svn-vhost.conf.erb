@@ -1,10 +1,10 @@
-<VirtualHost *:80>
+<VirtualHost *:8001>
   ServerName <%= @params[:server_name] %>
 
   <Location />
     DAV svn
 
-    SVNParentPath <%= node[:codefoundry][:repo_dir]/svn %>
+    SVNParentPath <%= File.join( node[:codefoundry][:repo_dir], 'svn' ) %>
     # enable repository listing; this vhost is only accessed locally
     SVNListParentPath on
 

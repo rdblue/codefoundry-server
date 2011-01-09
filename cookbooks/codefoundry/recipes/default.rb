@@ -23,7 +23,7 @@ include_recipe 'apache2::mod_dav_svn'
 include_recipe 'subversion::client'
 
 # storage
-directory "#{node[:codefoundry][:repo_dir]}/svn" do
+directory File.join( node[:codefoundry][:repo_dir], 'svn' ) do
   recursive true
   owner node[:apache][:user]
   group node[:apache][:user]
@@ -37,7 +37,7 @@ end
 #end
 
 # set up git hosting storage
-directory "#{node[:codefoundry][:repo_dir]}/git" do
+directory File.join( node[:codefoundry][:repo_dir], 'git' ) do
   recursive true
   owner node[:apache][:user]
   group node[:apache][:user]
@@ -45,12 +45,26 @@ directory "#{node[:codefoundry][:repo_dir]}/git" do
 end
 
 # set up the CodeFoundry application
+include_recipe 'git'
 
-# clone the repository
-# update the repository
-# check out the correct tag
-# create db.yml
-# create settings.yml
+# get the CodeFoundry source code
+git node[:codefoundry][:app_dir] do
+  repository node[:codefoundry][:app_git_url]
+  reference node[:codefoundry][:app_git_tag]
+  action :sync
+end
+
+# create CodeFoundry's database.yml
+template File.join( node[:codefoundry][:app_dir], 'config', 'database.yml' ) do
+  source "database.yml.erb"
+  variables( node[:codefoundry] )
+end
+
+# create CodeFoundry's settings.yml
+template File.join( node[:codefoundry][:app_dir], 'config', 'settings.yml' ) do
+  source "settings.yml.erb"
+  variables( node[:codefoundry] )
+end
 
 # create the apache vhost
 #web_app "codefoundry" do
