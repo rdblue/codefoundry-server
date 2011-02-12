@@ -16,13 +16,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# update to avoid package errors
+include_recipe 'apt'
+
+# install ruby with rvm
+include_recipe 'rvm'
+
+# start apache configuration
 include_recipe 'apache2'
 
 # set up SVN hosting through apache and mod_dav_svn
 include_recipe 'apache2::mod_dav_svn'
 include_recipe 'subversion::client'
 
-# storage
+# storage for SVN projects
 directory File.join( node[:codefoundry][:repo_dir], 'svn' ) do
   recursive true
   owner node[:apache][:user]
@@ -30,13 +37,13 @@ directory File.join( node[:codefoundry][:repo_dir], 'svn' ) do
   mode "0755"
 end
 
-# the apache vhost for subversion
+# CF will proxy to an apache vhost for SVN
 web_app "subversion" do
   template "svn-vhost.conf.erb"
   server_name "svn-host"
 end
 
-# set up git hosting storage
+# storage for git projects
 directory File.join( node[:codefoundry][:repo_dir], 'git' ) do
   recursive true
   owner node[:apache][:user]
@@ -44,7 +51,10 @@ directory File.join( node[:codefoundry][:repo_dir], 'git' ) do
   mode "0755"
 end
 
-# set up the CodeFoundry application
+# add passenger/mod_rack to run the CF application
+# include_recipe 'passenger'
+
+# set up the CodeFoundry application and vhost
 
 # get the CodeFoundry source code
 include_recipe 'git'
