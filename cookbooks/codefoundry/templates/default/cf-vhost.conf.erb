@@ -9,13 +9,13 @@
   <% if @params[:server_aliases] and @params[:server_aliases].respond_to? :map %>
   ServerAlias <%= @params[:server_aliases].map { |a| "\"#{a}\"" }.join(' ') %>
   <% end %>
-  DocumentRoot <%= @params[:docroot] %>
+  DocumentRoot <%= @params[:docroot] %>/public
 
   # ssl settings
 
   # rails settings
   RailsBaseURI /
-  RailsEnv <%= @params[:rails_env] %>
+  RailsEnv <%= node[:rails][:environment] %>
   RailsAllowModRewrite on
   PassengerMaxPoolSize <%= node[:rails][:max_pool_size] %>
 
@@ -27,8 +27,8 @@
   </Directory>
 
   LogLevel info
-  ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
-  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
+  ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:server_name] %>-error.log
+  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:server_name] %>-access.log combined
 
   RewriteEngine On
   RewriteLog <%= node[:apache][:log_dir] %>/<%= @application_name %>-rewrite.log
