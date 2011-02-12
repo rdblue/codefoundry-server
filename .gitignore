@@ -1,2 +1,6 @@
 .vagrant
 .*.swp
+# ignore shared folders that are not configuration
+app/*
+db/*
+repositories/*
