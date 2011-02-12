@@ -51,8 +51,9 @@ directory File.join( node[:codefoundry][:repo_dir], 'git' ) do
   mode "0755"
 end
 
-# add passenger/mod_rack to run the CF application
-# include_recipe 'passenger'
+# add passenger/mod_rack and rails to run the CF application
+include_recipe 'passenger_apache2::mod_rails'
+include_recipe 'rails'
 
 # set up the CodeFoundry application and vhost
 
@@ -77,9 +78,9 @@ template File.join( node[:codefoundry][:app_dir], 'config', 'settings.yml' ) do
 end
 
 # create the apache vhost for CF
-#web_app "codefoundry" do
-#  template "cf-vhost.conf.erb"
-#  server_name "codefoundry"
-#  docroot node[:codefoundry][:app_dir]
-#end
+web_app "codefoundry" do
+  template "cf-vhost.conf.erb"
+  server_name "codefoundry"
+  docroot node[:codefoundry][:app_dir]
+end
 

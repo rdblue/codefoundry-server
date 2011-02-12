@@ -46,6 +46,9 @@ Vagrant::Config.run do |config|
       :apache => {
           :listen_ports => [80, 443, 8001]
         },
+      :rails => {
+          :environment => 'development'
+        },
       :codefoundry => {
           :app_dir => "/var/www/vhosts/codefoundry",
           :app_git_url => "git://github.com/rdblue/codefoundry.git",
