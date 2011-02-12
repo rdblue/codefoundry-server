@@ -1,6 +1,8 @@
 <VirtualHost *:443>
   ServerName <%= @params[:server_name] %>
-  ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+  <% if @params[:server_aliases] and @params[:server_aliases].respond_to? :map %>
+  ServerAlias <%= @params[:server_aliases].map { |a| "\"#{a}\"" }.join(' ') %>
+  <% end %>
   DocumentRoot <%= @params[:docroot] %>
 
   # ssl settings
@@ -28,7 +30,7 @@
   # Canonical host
   RewriteCond %{HTTP_HOST}   !^<%= @params[:server_name] %> [NC]
   RewriteCond %{HTTP_HOST}   !^$
-  RewriteRule ^/(.*)$        http://<%= @params[:server_name] %>/$1 [L,R=301]
+  RewriteRule ^/(.*)$        https://<%= @params[:server_name] %>/$1 [L,R=301]
 
   RewriteCond %{DOCUMENT_ROOT}/system/maintenance.html -f
   RewriteCond %{SCRIPT_FILENAME} !maintenance.html

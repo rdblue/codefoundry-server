@@ -40,6 +40,9 @@ Vagrant::Config.run do |config|
 
   # You may also specify custom JSON attributes:
   config.chef.json.merge! ( {
+      :apache => {
+          :listen_ports => [80, 443, 8001]
+        },
       :codefoundry => {
           :app_dir => "/var/www/vhosts/codefoundry",
           :app_git_url => "git://github.com/rdblue/codefoundry.git",

@@ -31,10 +31,10 @@ directory File.join( node[:codefoundry][:repo_dir], 'svn' ) do
 end
 
 # the apache vhost for subversion
-#web_app "subversion" do
-#  template "svn-vhost.conf.erb"
-#  server_name "svn-host"
-#end
+web_app "subversion" do
+  template "svn-vhost.conf.erb"
+  server_name "svn-host"
+end
 
 # set up git hosting storage
 directory File.join( node[:codefoundry][:repo_dir], 'git' ) do
@@ -67,8 +67,9 @@ template File.join( node[:codefoundry][:app_dir], 'config', 'settings.yml' ) do
 end
 
 # create the apache vhost for CF
-web_app "codefoundry" do
-  template "cf-vhost.conf.erb"
-  server_name "codefoundry"
-end
+#web_app "codefoundry" do
+#  template "cf-vhost.conf.erb"
+#  server_name "codefoundry"
+#  docroot node[:codefoundry][:app_dir]
+#end
 
