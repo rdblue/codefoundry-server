@@ -1,3 +1,9 @@
+# everything over HTTP is redirected to HTTPS
+<VirtualHost *:80>
+  ServerName <%= @params[:server_name] %>
+  Redirect permanent / https://<%= @params[:server_name] %>/
+</VirtualHost>
+
 <VirtualHost *:443>
   ServerName <%= @params[:server_name] %>
   <% if @params[:server_aliases] and @params[:server_aliases].respond_to? :map %>
