@@ -19,8 +19,8 @@
 # update to avoid package errors
 include_recipe 'apt'
 
-# install ruby with rvm
-include_recipe 'rvm'
+# install ruby 1.9.2 with rvm
+include_recipe 'rvm::ruby_192'
 
 # start apache configuration
 include_recipe 'apache2'

@@ -38,9 +38,6 @@ Vagrant::Config.run do |config|
 
   # You may also specify custom JSON attributes:
   config.chef.json.merge! ( {
-      :rvm => {
-          :default_ruby => 'ruby-1.9.2'
-        },
       :apache => {
           :listen_ports => [80, 443, 8001]
         },
