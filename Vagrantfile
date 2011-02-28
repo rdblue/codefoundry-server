@@ -24,7 +24,7 @@ Vagrant::Config.run do |config|
   # If you change these, update the entries in the JSON sent to Chef.
   config.vm.share_folder("repositories", "/var/codefoundry", "repositories")
   config.vm.share_folder("db", "/var/db", "db")
-  config.vm.share_folder("app", "/var/www/vhosts/codefoundry", "app")
+  config.vm.share_folder("app", "/var/www/vhosts/codefoundry/repo", "app")
 
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
@@ -34,8 +34,6 @@ Vagrant::Config.run do |config|
   config.chef.cookbooks_path = File.join( project_root, 'cookbooks' )
 
   # chef recipies to use
-  #config.chef.add_recipe 'apache2'
-  #config.chef.add_recipe 'apache2::mod_dav_svn'
   config.chef.add_recipe 'codefoundry'
 
   # You may also specify custom JSON attributes:
@@ -49,13 +47,17 @@ Vagrant::Config.run do |config|
       :rails => {
           :environment => 'development'
         },
+      :bundler => {
+          :apps_path => '/var/www/vhosts',
+          :app => 'codefoundry'
+        },
       :codefoundry => {
-          :app_dir => "/var/www/vhosts/codefoundry",
-          :app_git_url => "git://github.com/rdblue/codefoundry.git",
-          :app_git_tag => "master",
-          :db_dir => "/var/db",
+          :apps_path => "/var/www/vhosts",
+          :git_url => "git://github.com/rdblue/codefoundry.git",
+          :git_ref => "master",
+          :db_path => "/var/db",
           :db_type => "sqlite",
-          :repo_dir => "/var/codefoundry"
+          :storage => "/var/codefoundry"
         }
     } )
 

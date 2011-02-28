@@ -4,7 +4,7 @@
   <Location />
     DAV svn
 
-    SVNParentPath <%= File.join( node[:codefoundry][:repo_dir], 'svn' ) %>
+    SVNParentPath <%= File.join( node[:codefoundry][:storage], 'svn' ) %>
     # enable repository listing
     SVNListParentPath on
 

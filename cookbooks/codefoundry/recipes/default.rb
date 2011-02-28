@@ -30,7 +30,7 @@ include_recipe 'apache2::mod_dav_svn'
 include_recipe 'subversion::client'
 
 # storage for SVN projects
-directory File.join( node[:codefoundry][:repo_dir], 'svn' ) do
+directory File.join( node[:codefoundry][:storage], 'svn' ) do
   recursive true
   owner node[:apache][:user]
   group node[:apache][:user]
@@ -44,7 +44,7 @@ web_app "subversion" do
 end
 
 # storage for git projects
-directory File.join( node[:codefoundry][:repo_dir], 'git' ) do
+directory File.join( node[:codefoundry][:storage], 'git' ) do
   recursive true
   owner node[:apache][:user]
   group node[:apache][:user]
@@ -56,31 +56,41 @@ include_recipe 'passenger_apache2::mod_rails'
 include_recipe 'rails'
 
 # set up the CodeFoundry application and vhost
+app_path = File.join( node[:codefoundry][:apps_path], 'codefoundry', 'current' )
+repo_path = File.join( node[:codefoundry][:apps_path], 'codefoundry', 'repo' )
 
 # get the CodeFoundry source code
 include_recipe 'git'
-git node[:codefoundry][:app_dir] do
-  repository node[:codefoundry][:app_git_url]
-  reference node[:codefoundry][:app_git_tag]
+git repo_path do
+  repository node[:codefoundry][:git_url]
+  reference node[:codefoundry][:git_ref]
   action :sync
 end
 
+link app_path do
+  to repo_path
+end
+
 # create CodeFoundry's database.yml
-template File.join( node[:codefoundry][:app_dir], 'config', 'database.yml' ) do
+template File.join( app_path, 'config', 'database.yml' ) do
   source "database.yml.erb"
   variables( node[:codefoundry] )
 end
 
 # create CodeFoundry's settings.yml
-template File.join( node[:codefoundry][:app_dir], 'config', 'settings.yml' ) do
+template File.join( app_path, 'config', 'settings.yml' ) do
   source "settings.yml.erb"
   variables( node[:codefoundry] )
 end
+
+# install gems required by CF
+include_recipe 'bundler'
+include_recipe 'bundler::install'
 
 # create the apache vhost for CF
 web_app "codefoundry" do
   template "cf-vhost.conf.erb"
   server_name "codefoundry"
-  docroot node[:codefoundry][:app_dir]
+  docroot app_path
 end
 
