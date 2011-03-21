@@ -1,0 +1,20 @@
+This is a project to create a CodeFoundry development server using Vagrant and
+Chef.  This is handy because CodeFoundry relies on SVN hosting in apache;
+running apache in a development VM is nice.
+
+CodeFoundry is developed for ruby-1.9.2 and Vagrant boxes come with ruby-1.8.7
+by default.  This creates problems when setting up the VM, so an additional
+Vagrantfile (-ruby-1.9.2) is included.  To create a base box with 1.9.2, run
+the following commands:
+
+ $ ln -s Vagrantfile-ruby-1.9.2 Vagrantfile
+ $ vagrant up
+ $ vagrant package
+ $ vagrant box add base-ruby192 /current/path/package.box
+ $ vagrant destroy
+
+Once the base-ruby192 box is created, you can bring up a CodeFoundry VM:
+
+ $ rm Vagrantfile
+ $ ln -s Vagrantfile-cf Vagrantfile
+ $ vagrant up

@@ -1,0 +1,22 @@
+Vagrant::Config.run do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # base this configuration off of the standard 32-bit lucid vm
+  config.vm.box = 'base'
+  # where you can find this vm
+  config.vm.box_url = 'http://files.vagrantup.com/lucid32.box'
+
+  # Enable provisioning with chef solo, specifying a cookbooks path (relative
+  # to this Vagrantfile), and adding some recipes and/or roles.
+  #
+  config.vm.provisioner = :chef_solo
+  project_root = File.dirname( __FILE__ )
+  config.chef.cookbooks_path = File.join( project_root, 'cookbooks' )
+
+  # chef recipies to use
+  config.chef.add_recipe 'apt'
+  config.chef.add_recipe 'rvm::ruby_192'
+
+end
