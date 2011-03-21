@@ -30,6 +30,15 @@ gem_package "chef" do
   # re-install the chef gem into rvm to enable subsequent chef-client run
 end
 
+# make sure Vagrant uses the newly-installed chef-solo
+template "/usr/local/bin/chef-solo" do
+  source "chef-solo.erb"
+  owner "root"
+  group "root"
+  mode 0755
+  variables( :chef_solo => "#{`rvm gemdir`.chomp}/bin/chef-solo" )
+end
+
 # Needed so that chef doesn't freak out if the chef-client service
 # isn't present.
 #service "chef-client"
