@@ -12,6 +12,11 @@
   DocumentRoot <%= @params[:docroot] %>/public
 
   # ssl settings
+  SSLEngine on
+  SSLVerifyClient optional
+  SSLCertificateFile <%= @params[:cert_path] %>
+  SSLCertificateKeyFile <%= @params[:key_path] %>
+  SSLOptions +StdEnvVars +FakeBasicAuth
 
   # rails settings
   RailsBaseURI /

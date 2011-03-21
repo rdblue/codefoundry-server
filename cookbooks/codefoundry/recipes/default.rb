@@ -20,10 +20,11 @@
 include_recipe 'apt'
 
 # install ruby 1.9.2 with rvm
-include_recipe 'rvm::ruby_192'
+#include_recipe 'rvm::ruby_192'
 
 # start apache configuration
 include_recipe 'apache2'
+include_recipe 'apache2::mod_ssl'
 
 # set up SVN hosting through apache and mod_dav_svn
 include_recipe 'apache2::mod_dav_svn'
@@ -87,10 +88,23 @@ end
 include_recipe 'bundler'
 include_recipe 'bundler::install'
 
+# set up self-signed cert and key (in templates/default)
+cf_cert = File.join( node[:apache][:dir], 'ssl', 'codefoundry.crt' )
+template cf_cert do
+  source "codefoundry.crt"
+end
+
+cf_key = File.join( node[:apache][:dir], 'ssl', 'codefoundry.key' )
+template cf_key do
+  source "codefoundry.key"
+end
+
 # create the apache vhost for CF
 web_app "codefoundry" do
   template "cf-vhost.conf.erb"
   server_name "codefoundry"
   docroot app_path
+  cert_path cf_cert
+  key_path cf_key
 end
 
