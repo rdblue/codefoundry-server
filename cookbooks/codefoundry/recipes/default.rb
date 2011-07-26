@@ -72,10 +72,26 @@ link app_path do
   to repo_path
 end
 
+# set up self-signed cert and key (in templates/default)
+cf_cert = File.join( node[:apache][:dir], 'ssl', 'codefoundry.crt' )
+template cf_cert do
+  source "codefoundry.crt"
+end
+
+cf_key = File.join( node[:apache][:dir], 'ssl', 'codefoundry.key' )
+template cf_key do
+  source "codefoundry.key"
+end
+
 # create CodeFoundry's database.yml
 template File.join( app_path, 'config', 'database.yml' ) do
   source "database.yml.erb"
   variables( node[:codefoundry] )
+end
+
+# migrate the database
+bash 'migrating to the lastest database version' do
+  code 'echo TODO: db:migrate'
 end
 
 # create CodeFoundry's settings.yml
@@ -88,17 +104,6 @@ end
 include_recipe 'bundler'
 include_recipe 'bundler::install'
 
-# set up self-signed cert and key (in templates/default)
-cf_cert = File.join( node[:apache][:dir], 'ssl', 'codefoundry.crt' )
-template cf_cert do
-  source "codefoundry.crt"
-end
-
-cf_key = File.join( node[:apache][:dir], 'ssl', 'codefoundry.key' )
-template cf_key do
-  source "codefoundry.key"
-end
-
 # create the apache vhost for CF
 web_app "codefoundry" do
   template "cf-vhost.conf.erb"
@@ -107,4 +112,3 @@ web_app "codefoundry" do
   cert_path cf_cert
   key_path cf_key
 end
-

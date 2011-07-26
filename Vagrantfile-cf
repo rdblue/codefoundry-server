@@ -1,3 +1,5 @@
+project_root = File.dirname( __FILE__ )
+
 Vagrant::Config.run do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
@@ -27,34 +29,33 @@ Vagrant::Config.run do |config|
 
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
-  #
-  config.vm.provisioner = :chef_solo
-  project_root = File.dirname( __FILE__ )
-  config.chef.cookbooks_path = File.join( project_root, 'cookbooks' )
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = File.join( project_root, 'cookbooks' )
 
-  # chef recipies to use
-  config.chef.add_recipe 'codefoundry'
+    # chef recipies to use
+    chef.add_recipe 'codefoundry'
 
-  # You may also specify custom JSON attributes:
-  config.chef.json.merge! ( {
-      :apache => {
-          :listen_ports => [80, 8001]
-        },
-      :rails => {
-          :environment => 'development'
-        },
-      :bundler => {
-          :apps_path => '/var/www/vhosts',
-          :app => 'codefoundry'
-        },
-      :codefoundry => {
-          :apps_path => "/var/www/vhosts",
-          :git_url => "git://github.com/rdblue/codefoundry.git",
-          :git_ref => "master",
-          :db_path => "/var/db",
-          :db_type => "sqlite",
-          :storage => "/var/codefoundry"
-        }
-    } )
+    # chef json DNA
+    chef.json = {
+        :apache => {
+            :listen_ports => [80, 8001]
+          },
+        :rails => {
+            :environment => 'development'
+          },
+        :bundler => {
+            :apps_path => '/var/www/vhosts',
+            :app => 'codefoundry'
+          },
+        :codefoundry => {
+            :apps_path => "/var/www/vhosts",
+            :git_url => "git://github.com/rdblue/codefoundry.git",
+            :git_ref => "master",
+            :db_path => "/var/db",
+            :db_type => "sqlite",
+            :storage => "/var/codefoundry"
+          }
+      }
+  end
 
 end

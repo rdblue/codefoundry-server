@@ -21,7 +21,6 @@
   # rails settings
   RailsBaseURI /
   RailsEnv <%= node[:rails][:environment] %>
-  RailsAllowModRewrite on
   PassengerMaxPoolSize <%= node[:rails][:max_pool_size] %>
 
   <Directory <%= @params[:docroot] %>>
