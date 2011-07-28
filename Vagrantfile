@@ -1,1 +1,1 @@
-Vagrantfile-cf
+Vagrantfile-ruby-1.9.2

@@ -12,13 +12,13 @@ include_recipe "rvm::default"
 
 bash "installing #{ruby_version}" do
   user "root"
-  code "/usr/local/bin/rvm install #{ruby_version}"
+  code "/usr/local/rvm/bin/rvm install #{ruby_version}"
   not_if "rvm list | grep #{ruby_version}"
 end
 
 bash "make #{ruby_version} the default ruby" do
   user "root"
-  code "/usr/local/bin/rvm --default #{ruby_version}"
+  code "/usr/local/rvm/bin/rvm --default #{ruby_version}"
   not_if "rvm list | grep '=> #{ruby_version}'"
   only_if { node[:rvm][:ruby][:default] }
 #  notifies :restart, "service[chef-client]"

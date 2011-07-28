@@ -1,3 +1,5 @@
+project_root = File.dirname( __FILE__ )
+
 Vagrant::Config.run do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
@@ -11,12 +13,12 @@ Vagrant::Config.run do |config|
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
   #
-  config.vm.provisioner = :chef_solo
-  project_root = File.dirname( __FILE__ )
-  config.chef.cookbooks_path = File.join( project_root, 'cookbooks' )
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = File.join( project_root, 'cookbooks' )
 
-  # chef recipies to use
-  config.chef.add_recipe 'apt'
-  config.chef.add_recipe 'rvm::ruby_192'
+    # chef recipies to use
+    chef.add_recipe 'apt'
+    chef.add_recipe 'rvm::ruby_192'
+  end
 
 end
