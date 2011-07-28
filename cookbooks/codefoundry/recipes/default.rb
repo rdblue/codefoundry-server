@@ -91,7 +91,7 @@ end
 
 # migrate the database
 bash 'migrating to the lastest database version' do
-  code 'echo TODO: db:migrate'
+  code "cd #{app_path} && rake db:migrate"
 end
 
 # create CodeFoundry's settings.yml
