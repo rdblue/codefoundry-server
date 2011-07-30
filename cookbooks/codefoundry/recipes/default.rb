@@ -56,6 +56,7 @@ include_recipe 'rails'
 # set up the CodeFoundry application and vhost
 app_path = File.join( node[:codefoundry][:apps_path], 'codefoundry', 'current' )
 repo_path = File.join( node[:codefoundry][:apps_path], 'codefoundry', 'repo' )
+db_link = File.join( node[:codefoundry][:apps_path], 'codefoundry', 'db' )
 
 # get the CodeFoundry source code
 include_recipe 'git'
@@ -65,8 +66,15 @@ git repo_path do
   action :sync
 end
 
+# link 'current' to the repository
 link app_path do
   to repo_path
+end
+
+# link 'db' to the actual db path.  this way, the application config can use
+# paths like ../db/<env>.sqlite3, which work inside and outside the VM.
+link db_link do
+  to node[:codefoundry][:db_path]
 end
 
 # install gems required by CF
