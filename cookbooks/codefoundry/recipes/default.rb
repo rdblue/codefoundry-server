@@ -122,3 +122,11 @@ web_app "codefoundry" do
   cert_path cf_cert
   key_path cf_key
 end
+
+# (re)start the delayed_job service.  this should eventually be done through a
+# real service resource, but those require a real service in /etc/init.d.  this
+# is a temporary hack in the mean time; we use restart so that it is guaranteed
+# to be freshly started after this run even if it was already running.
+bash 'start delayed_job daemon' do
+  code "#{File.join( app_path, 'script', 'delayed_job' )} restart"
+end
