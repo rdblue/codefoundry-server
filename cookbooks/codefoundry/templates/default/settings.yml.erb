@@ -1,11 +1,10 @@
 <%= node[:rails][:environment] %>:
-  repository_root: <%= @repo_dir %>
+  repository_base_path: <%= @storage %>
+  repository_archive_path: <%= File.join( @storage, 'archive' ) %>
   svn_app_config:
     host: localhost
     port: 8001
-    path_prefix: /
   git_app_config:
     git_path: /usr/bin/git
-  storage: /var/codefoundry
   marker:
     link_base: /
