@@ -94,8 +94,9 @@ end
 
 # migrate the database
 bash 'migrating to the lastest database version' do
-  code "cd #{app_path} && rake db:migrate"
-  user node[:apache][:user]
+  cwd app_path
+  code "rake db:migrate"
+  #user node[:apache][:user]
 end
 
 # create CodeFoundry's settings.yml
@@ -130,5 +131,5 @@ end
 # to be freshly started after this run even if it was already running.
 bash 'start delayed_job daemon' do
   code "#{File.join( app_path, 'script', 'delayed_job' )} restart"
-  user node[:apache][:user]
+  #user node[:apache][:user]
 end

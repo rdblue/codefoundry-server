@@ -13,4 +13,7 @@
     Deny from all
     Allow from 127
   </Location>
+
+  ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:server_name] %>-error.log
+  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:server_name] %>-svn.log "%t %u %{SVN-ACTION}e" env=SVN-ACTION
 </VirtualHost>
