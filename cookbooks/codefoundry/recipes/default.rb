@@ -19,6 +19,11 @@
 # update to avoid package errors
 include_recipe 'apt'
 
+# ImageMagick is requried for paperclip
+package 'imagemagick' do
+  action :install
+end
+
 # start apache configuration
 include_recipe 'apache2'
 include_recipe 'apache2::mod_ssl'
