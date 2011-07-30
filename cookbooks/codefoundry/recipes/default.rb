@@ -19,9 +19,6 @@
 # update to avoid package errors
 include_recipe 'apt'
 
-# install ruby 1.9.2 with rvm
-#include_recipe 'rvm::ruby_192'
-
 # start apache configuration
 include_recipe 'apache2'
 include_recipe 'apache2::mod_ssl'
@@ -72,16 +69,9 @@ link app_path do
   to repo_path
 end
 
-# set up self-signed cert and key (in templates/default)
-cf_cert = File.join( node[:apache][:dir], 'ssl', 'codefoundry.crt' )
-template cf_cert do
-  source "codefoundry.crt"
-end
-
-cf_key = File.join( node[:apache][:dir], 'ssl', 'codefoundry.key' )
-template cf_key do
-  source "codefoundry.key"
-end
+# install gems required by CF
+include_recipe 'bundler'
+include_recipe 'bundler::install'
 
 # create CodeFoundry's database.yml
 template File.join( app_path, 'config', 'database.yml' ) do
@@ -100,9 +90,16 @@ template File.join( app_path, 'config', 'settings.yml' ) do
   variables( node[:codefoundry] )
 end
 
-# install gems required by CF
-include_recipe 'bundler'
-include_recipe 'bundler::install'
+# set up self-signed cert and key (in templates/default)
+cf_cert = File.join( node[:apache][:dir], 'ssl', 'codefoundry.crt' )
+template cf_cert do
+  source "codefoundry.crt"
+end
+
+cf_key = File.join( node[:apache][:dir], 'ssl', 'codefoundry.key' )
+template cf_key do
+  source "codefoundry.key"
+end
 
 # create the apache vhost for CF
 web_app "codefoundry" do
