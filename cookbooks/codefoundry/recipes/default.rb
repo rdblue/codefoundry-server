@@ -92,17 +92,17 @@ template File.join( app_path, 'config', 'database.yml' ) do
   variables( node[:codefoundry] )
 end
 
+# create CodeFoundry's settings.yml
+template File.join( app_path, 'config', 'settings.yml' ) do
+  source "settings.yml.erb"
+  variables( node[:codefoundry] )
+end
+
 # migrate the database
 bash 'migrating to the lastest database version' do
   cwd app_path
   code "rake db:migrate"
   #user node[:apache][:user]
-end
-
-# create CodeFoundry's settings.yml
-template File.join( app_path, 'config', 'settings.yml' ) do
-  source "settings.yml.erb"
-  variables( node[:codefoundry] )
 end
 
 # set up self-signed cert and key (in templates/default)
